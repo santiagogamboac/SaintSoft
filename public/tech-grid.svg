@@ -1,0 +1,47 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grid-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:0.3" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="url(#grid-gradient)" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#grid)" />
+  
+  <!-- Animated circles -->
+  <circle cx="200" cy="150" r="80" fill="none" stroke="#0EA5E9" stroke-width="2" opacity="0.3">
+    <animate attributeName="r" values="80;100;80" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="800" cy="400" r="120" fill="none" stroke="#10B981" stroke-width="2" opacity="0.3">
+    <animate attributeName="r" values="120;140;120" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="1000" cy="200" r="60" fill="none" stroke="#0EA5E9" stroke-width="2" opacity="0.3">
+    <animate attributeName="r" values="60;80;60" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Tech nodes -->
+  <g opacity="0.5">
+    <circle cx="300" cy="300" r="4" fill="#0EA5E9"/>
+    <circle cx="500" cy="200" r="4" fill="#10B981"/>
+    <circle cx="700" cy="500" r="4" fill="#0EA5E9"/>
+    <circle cx="900" cy="600" r="4" fill="#10B981"/>
+    
+    <!-- Connecting lines -->
+    <line x1="300" y1="300" x2="500" y2="200" stroke="#0EA5E9" stroke-width="1" opacity="0.3">
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="500" y1="200" x2="700" y2="500" stroke="#10B981" stroke-width="1" opacity="0.3">
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="700" y1="500" x2="900" y2="600" stroke="#0EA5E9" stroke-width="1" opacity="0.3">
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="3.5s" repeatCount="indefinite"/>
+    </line>
+  </g>
+</svg>

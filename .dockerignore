@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+__tests__
+*.md
+.vscode
+.kiro
+coverage
+*.tsbuildinfo
