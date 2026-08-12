@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import ThemeToggle from "../ui/ThemeToggle";
+import { WhatsAppIcon, WHATSAPP_HREF } from "../ui/WhatsAppWidget";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -117,6 +118,18 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <motion.a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escríbenos por WhatsApp"
+              className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/25 hover:shadow-[#25D366]/40 transition-shadow duration-300"
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <WhatsAppIcon size={20} />
+            </motion.a>
+            <motion.a
               href="#contacto"
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
               whileHover={{ scale: 1.03, y: -1 }}
@@ -131,6 +144,15 @@ export default function Header() {
           {/* Mobile: Theme Toggle + Menu Button */}
           <div className="md:hidden flex items-center gap-3">
             <ThemeToggle />
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escríbenos por WhatsApp"
+              className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/25"
+            >
+              <WhatsAppIcon size={18} />
+            </a>
             <button
               className="p-2 rounded-lg text-foreground hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

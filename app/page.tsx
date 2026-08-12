@@ -9,6 +9,7 @@ import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 import MouseFollower from "@/components/ui/MouseFollower";
+import WhatsAppWidget from "@/components/ui/WhatsAppWidget";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppWidget />
     </div>
   );
 }
