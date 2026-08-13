@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, MapPin } from "lucide-react";
+import { FooterChannels } from "../ui/ContactChannels";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -61,6 +62,7 @@ export default function Footer() {
                     </motion.a>
                   );
                 })}
+                <FooterChannels />
               </div>
             </motion.div>
           </div>

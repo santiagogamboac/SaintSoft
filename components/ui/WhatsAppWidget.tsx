@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { trackEvent, setLastChannel } from "@/lib/analytics";
+import { WHATSAPP_CO } from "@/lib/contact";
 
-const WHATSAPP_NUMBER = "573027775527";
-const WHATSAPP_MESSAGE = "Hola, quiero más información sobre los servicios de SaintSoft.";
-
-export const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  WHATSAPP_MESSAGE
-)}`;
+// El número vive en lib/contact.ts, que es la fuente única de los canales.
+// Se reexporta porque otros módulos ya importaban WHATSAPP_HREF desde aquí.
+export const WHATSAPP_HREF = WHATSAPP_CO.href;
 
 export function WhatsAppIcon({ size = 28 }: { size?: number }) {
   return (
@@ -30,6 +29,13 @@ export default function WhatsAppWidget() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"
+      onClick={() => {
+        setLastChannel(WHATSAPP_CO.id);
+        trackEvent("click_contact_channel", {
+          channel: WHATSAPP_CO.id,
+          placement: "widget",
+        });
+      }}
       initial={{ opacity: 0, scale: 0.5, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}

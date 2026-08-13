@@ -7,7 +7,23 @@ export type AnalyticsEvent =
   | "click_diagnostic_cta"
   | "select_product_interest"
   | "start_contact_form"
-  | "submit_contact_form";
+  | "submit_contact_form"
+  | "click_contact_channel";
+
+/** Dónde se pulsó un canal de contacto, para saber qué emplazamiento convierte. */
+export type ChannelPlacement = "header" | "contact" | "footer" | "widget";
+
+// El último canal que tocó el visitante, para poder atribuir el envío del
+// formulario a un canal aunque el clic haya ocurrido en otra sección.
+let lastChannel: string | null = null;
+
+export function setLastChannel(channel: string) {
+  lastChannel = channel;
+}
+
+export function getLastChannel() {
+  return lastChannel;
+}
 
 declare global {
   interface Window {

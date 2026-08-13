@@ -5,7 +5,9 @@ import { Mail, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
 import { contactInterestOptions } from "@/lib/content";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, getLastChannel } from "@/lib/analytics";
+import { detectRegion } from "@/lib/contact";
+import ContactChannels from "../ui/ContactChannels";
 
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
@@ -47,7 +49,13 @@ export default function Contact() {
       }
 
       setStatus("success");
-      trackEvent("submit_contact_form", { interest: formData.interest });
+      // Región y último canal tocado viajan con el envío: es lo que permite
+      // atribuir una oportunidad a un canal, y no solo contar clics sueltos.
+      trackEvent("submit_contact_form", {
+        interest: formData.interest,
+        region_detected: detectRegion(),
+        last_channel: getLastChannel(),
+      });
       setFormData({ name: "", email: "", phone: "", company: "", interest: "", message: "" });
     } catch (err) {
       setStatus("error");
@@ -240,6 +248,8 @@ export default function Contact() {
                 </div>
               </div>
               
+              <ContactChannels placement="contact" />
+
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin className="text-primary" size={24} />
