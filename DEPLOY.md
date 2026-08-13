@@ -2,9 +2,11 @@
 
 ## URL actual
 
-https://saintsoft.44.222.156.217.nip.io
+https://saintsoft.us (también responde `www.saintsoft.us`)
 
-`nip.io` resuelve `<lo-que-sea>.<IP>.nip.io` a esa IP. Permite tener HTTPS real (Let's Encrypt) sin dominio propio. Cuando se compre el dominio real, ver la sección "Migrar a dominio propio" al final.
+La URL antigua sigue funcionando: https://saintsoft.44.222.156.217.nip.io
+
+`nip.io` resuelve `<lo-que-sea>.<IP>.nip.io` a esa IP. Permite tener HTTPS real (Let's Encrypt) sin dominio propio. Se dejó el bloque `nip.io` en `nginx.conf` como fallback, no hace daño mantenerlo.
 
 ## Dónde vive esto
 
@@ -32,15 +34,19 @@ El código de la landing vive en `/home/ubuntu/app/saintsoft/` en el servidor (s
 
 ## nginx
 
-Un solo `nginx.conf` (`/home/ubuntu/app/nginx/nginx.conf`) sirve ambos sitios con dos bloques `server{}` distintos, diferenciados por `server_name`:
+Un solo `nginx.conf` (`/home/ubuntu/app/nginx/nginx.conf`) sirve todo con tres bloques `server{}` en el puerto 443, diferenciados por `server_name` (SNI):
 - `44.222.156.217.nip.io` → CRM (backend/frontend/minio)
-- `saintsoft.44.222.156.217.nip.io` → esta landing (`proxy_pass http://saintsoft:3000`)
+- `saintsoft.44.222.156.217.nip.io` → landing, URL antigua (`proxy_pass http://saintsoft:3000`)
+- `saintsoft.us` / `www.saintsoft.us` → landing, dominio propio (`proxy_pass http://saintsoft:3000`)
 
 Antes de editar `nginx.conf`: **siempre validar con `docker exec crm-nginx nginx -t`** antes de aplicar, y aplicar con `docker exec crm-nginx nginx -s reload` (recarga sin downtime, no reinicia el contenedor).
+
+**Importante — bind mount de un solo archivo:** `docker-compose.yml` monta `./nginx/nginx.conf:/etc/nginx/nginx.conf:ro`. Si el archivo se reemplaza en el host con algo que cambie el inodo (`mv archivo_nuevo nginx.conf`, muchos editores hacen esto al guardar), el bind mount queda apuntando al inodo viejo y el contenedor no ve el cambio aunque `cat` en el host muestre el archivo correcto — ni `nginx -s reload` lo arregla, porque relee el inodo montado, no el path. Hay que **editar el archivo in-place** (ej. `cat nuevo > nginx.conf`, no `mv nuevo nginx.conf`) o, si ya se reemplazó, hacer `docker restart crm-nginx` (esto sí causa ~1-3s de corte para CRM y landing juntos, avisar antes de hacerlo en producción).
 
 Backups guardados en el servidor antes de la primera edición:
 - `/home/ubuntu/app/nginx/nginx.conf.bak-presaintsoft`
 - `/home/ubuntu/app/docker-compose.yml.bak-presaintsoft`
+- `/home/ubuntu/app/nginx/nginx.conf.bak-presaintsoftdomain` (antes de agregar el dominio propio)
 
 ## Secretos (envío de correo del formulario)
 
@@ -88,13 +94,31 @@ Nota: el binario correcto en este servidor es `docker-compose` (standalone v2.24
 
 `t3.small` (2 vCPU, 2GB RAM, ~8GB disco libre), compartido con el CRM. El contenedor `saintsoft` tiene un límite de memoria (`mem_limit: 300m` en `docker-compose.yml`) para no arriesgar al CRM; uso real en operación normal: ~30MB. El build de Docker (`npm run build` dentro del contenedor) es lo más pesado — usa swap temporalmente pero no ha causado problemas.
 
-## Migrar a dominio propio (pendiente)
+## Dominio propio (saintsoft.us)
 
-Cuando se compre el dominio:
-1. Apuntar el DNS (registro A) del dominio/subdominio a `44.222.156.217`.
-2. Pedir el certificado: `docker-compose run --rm certbot certonly --webroot -w /var/www/certbot -d tudominio.com --email <email> --agree-tos --no-eff-email`
-3. En `nginx.conf`, duplicar el bloque `server` de saintsoft cambiando `server_name` y las rutas de `ssl_certificate`/`ssl_certificate_key` al nuevo dominio (se puede dejar el bloque de `nip.io` o quitarlo).
-4. Validar (`nginx -t`) y recargar (`nginx -s reload`).
+Comprado en Namecheap, DNS gestionado en Cloudflare (plan Free). Namecheap solo tiene los nameservers apuntando a Cloudflare (`logan.ns.cloudflare.com`, `ulla.ns.cloudflare.com`); todo lo demás (registros DNS) se administra desde el dashboard de Cloudflare.
+
+Registros DNS relevantes en Cloudflare:
+- `A saintsoft.us → 44.222.156.217` — **proxy status: DNS only** (nube gris), a propósito.
+- `CNAME www → saintsoft.us` — también DNS only.
+- MX/TXT de reenvío de correo (`eforward*.registrar-servers.com`, SPF) se conservaron intactos desde Namecheap — se usan para email a `@saintsoft.us`.
+
+**Por qué DNS only y no Proxied (nube naranja):** con el proxy de Cloudflare activado, Cloudflare termina la conexión TLS y le habla al origen (este servidor) — eso requiere poner el modo SSL/TLS de Cloudflare en "Full (strict)" para no crear un loop de redirección o servir con un certificado que Cloudflare no valide. Se dejó en DNS only para simplificar la primera puesta en marcha. Si más adelante se quiere activar el proxy (CDN, protección DDoS, WAF):
+1. En Cloudflare → SSL/TLS → Overview, poner el modo en **Full (strict)**.
+2. Activar el proxy (nube naranja) en los registros A y CNAME.
+3. Nada cambia del lado de nginx/certbot — el certificado de Let's Encrypt sigue siendo válido para la conexión Cloudflare↔origen.
+
+Certificado: emitido con certbot (ver comando abajo), cubre `saintsoft.us` y `www.saintsoft.us` en un solo certificado, expira 2026-11-11. **No hay renovación automática configurada** — hay que renovarlo manualmente antes de esa fecha (o configurar un cron con `docker-compose run --rm certbot renew` + reload de nginx).
+
+```bash
+# Emitir/renovar certificado (requiere que el registro A ya apunte a este servidor y el puerto 80 esté abierto)
+cd /home/ubuntu/app
+docker-compose run --rm certbot certonly --webroot -w /var/www/certbot -d saintsoft.us -d www.saintsoft.us --email santiagogamboacely@gmail.com --agree-tos --no-eff-email
+
+# Validar y recargar nginx después
+docker exec crm-nginx nginx -t
+docker exec crm-nginx nginx -s reload
+```
 
 ## Si se pierde el acceso SSH (.pem)
 
