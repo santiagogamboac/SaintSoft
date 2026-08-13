@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import ThemeToggle from "../ui/ThemeToggle";
 import { WhatsAppIcon, WHATSAPP_HREF } from "../ui/WhatsAppWidget";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,7 +23,7 @@ export default function Header() {
 
   // Active section tracking via IntersectionObserver
   useEffect(() => {
-    const sectionIds = ["servicios", "tecnologias", "contacto"];
+    const sectionIds = ["productos", "caso-tiviplay", "tecnologias", "contacto"];
     const observers: IntersectionObserver[] = [];
 
     sectionIds.forEach((id) => {
@@ -46,7 +47,8 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { label: "Servicios", href: "#servicios", id: "servicios" },
+    { label: "Productos", href: "#productos", id: "productos" },
+    { label: "Caso TiviPlay", href: "#caso-tiviplay", id: "caso-tiviplay" },
     { label: "Tecnologías", href: "#tecnologias", id: "tecnologias" },
     { label: "Contacto", href: "#contacto", id: "contacto" },
   ];
@@ -131,12 +133,13 @@ export default function Header() {
             </motion.a>
             <motion.a
               href="#contacto"
+              onClick={() => trackEvent("click_diagnostic_cta", { source: "header" })}
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
               whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              Solicitar Demo
+              Solicitar Diagnóstico
               <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </motion.a>
           </div>
@@ -198,9 +201,12 @@ export default function Header() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
                 className="mt-3 inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-lg shadow-blue-500/25"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  trackEvent("click_diagnostic_cta", { source: "header_mobile" });
+                }}
               >
-                Solicitar Demo
+                Solicitar Diagnóstico
                 <ArrowRight size={14} />
               </motion.a>
             </nav>

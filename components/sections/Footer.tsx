@@ -7,13 +7,14 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    servicios: [
-      { label: "Chatbots de IA", href: "#servicios" },
-      { label: "CRM", href: "#servicios" },
-      { label: "Páginas Web", href: "#servicios" },
-      { label: "Agendamiento de Citas", href: "#servicios" },
+    productos: [
+      { label: "CRM Operacional", href: "#productos" },
+      { label: "Kit de Presencia Digital", href: "#productos" },
+      { label: "Automatización Comercial", href: "#productos" },
+      { label: "Desarrollo a Medida", href: "#productos" },
     ],
     empresa: [
+      { label: "Caso TiviPlay", href: "#caso-tiviplay" },
       { label: "Tecnologías", href: "#tecnologias" },
       { label: "Contacto", href: "#contacto" },
     ],
@@ -64,7 +65,7 @@ export default function Footer() {
             </motion.div>
           </div>
           
-          {/* Services */}
+          {/* Products */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -72,9 +73,9 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <h4 className="font-semibold mb-4 dark:text-[#d4d4d4]">Servicios</h4>
+              <h4 className="font-semibold mb-4 dark:text-[#d4d4d4]">Productos</h4>
               <ul className="space-y-3">
-                {footerLinks.servicios.map((link) => (
+                {footerLinks.productos.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}

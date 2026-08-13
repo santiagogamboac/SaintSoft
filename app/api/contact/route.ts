@@ -7,6 +7,7 @@ interface ContactPayload {
   email: string;
   phone?: string;
   company: string;
+  interest?: string;
   message: string;
 }
 
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, phone, company, message } = body as ContactPayload;
+  const { name, email, phone, company, interest, message } = body as ContactPayload;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
         `Email: ${email.trim()}`,
         `Teléfono: ${phone?.trim() || "No proporcionado"}`,
         `Empresa: ${company.trim()}`,
+        `Interés: ${interest?.trim() || "No especificado"}`,
         "",
         "Mensaje:",
         message.trim(),

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Button from "../ui/Button";
+import { trackEvent } from "@/lib/analytics";
 
 export default function CTA() {
   return (
@@ -14,7 +15,7 @@ export default function CTA() {
           backgroundSize: '40px 40px'
         }} />
       </div>
-      
+
       <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -22,10 +23,10 @@ export default function CTA() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            ¿Listo para Escalar su Infraestructura?
+            ¿Listo para Organizar su Operación?
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Transforme su visión en realidad con el socio tecnológico que entiende su negocio.
+            Empecemos por un diagnóstico: entendemos su proceso antes de proponer una solución.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -33,8 +34,9 @@ export default function CTA() {
               variant="secondary"
               size="lg"
               className="bg-white text-primary hover:bg-gray-100 border-0"
+              onClick={() => trackEvent("click_diagnostic_cta", { source: "cta_banner" })}
             >
-              Hablemos de su Proyecto
+              Solicitar Diagnóstico
               <ArrowRight size={20} />
             </Button>
           </div>

@@ -9,20 +9,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SaintSoft | Desarrollo de Software Corporativo a Medida",
-  description: "Soluciones de software a medida, escalables y seguras para CEOs y CTOs que exigen excelencia técnica. Transformación digital, automatización y plataformas enterprise.",
-  keywords: ["desarrollo de software a medida", "software corporativo", "automatización de procesos", "integraciones API", "plataformas web empresariales", "apps móviles", "IA empresarial", "staff augmentation", "consultoría tecnológica"],
+  title: "SaintSoft | CRM, Automatización y Software para Operaciones Reales",
+  description: "Creamos CRM, automatizaciones y plataformas empresariales basadas en procesos reales. Conoce nuestro modelo de implementación y el caso JUMOCOL / TiviPlay.",
+  keywords: ["CRM para servicios recurrentes", "software para call center", "automatización de recaudo", "CRM de renovaciones", "software empresarial a medida", "automatización de WhatsApp y ventas", "conciliación de pagos y servicios", "transformación digital para pymes"],
   authors: [{ name: "SaintSoft" }],
   openGraph: {
-    title: "SaintSoft | Desarrollo de Software Corporativo a Medida",
-    description: "Construimos el Software que Impulsa a las Empresas del Futuro",
+    title: "SaintSoft | CRM, Automatización y Software para Operaciones Reales",
+    description: "Construimos software a partir de operaciones reales: arquitectura tecnológica, conocimiento empresarial y procesos validados.",
     type: "website",
     locale: "es_ES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SaintSoft | Desarrollo de Software Corporativo a Medida",
-    description: "Construimos el Software que Impulsa a las Empresas del Futuro",
+    title: "SaintSoft | CRM, Automatización y Software para Operaciones Reales",
+    description: "Construimos software a partir de operaciones reales: arquitectura tecnológica, conocimiento empresarial y procesos validados.",
   },
 };
 

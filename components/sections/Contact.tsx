@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Mail, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
+import { contactInterestOptions } from "@/lib/content";
+import { trackEvent } from "@/lib/analytics";
 
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
@@ -13,10 +15,19 @@ export default function Contact() {
     email: "",
     phone: "",
     company: "",
+    interest: "",
     message: "",
   });
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const hasStartedForm = useRef(false);
+
+  useEffect(() => {
+    const interest = new URLSearchParams(window.location.search).get("interes");
+    if (interest) {
+      setFormData((prev) => ({ ...prev, interest }));
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,20 +47,27 @@ export default function Contact() {
       }
 
       setStatus("success");
-      setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+      trackEvent("submit_contact_form", { interest: formData.interest });
+      setFormData({ name: "", email: "", phone: "", company: "", interest: "", message: "" });
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "No se pudo enviar el formulario.");
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    if (!hasStartedForm.current) {
+      hasStartedForm.current = true;
+      trackEvent("start_contact_form");
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-  
+
   return (
     <section id="contacto" className="py-24 bg-surface-hover/5 dark:bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -136,6 +154,29 @@ export default function Contact() {
                 />
               </div>
               
+              <div>
+                <label htmlFor="interest" className="block text-sm font-medium text-gray-900 dark:text-[#ffffff] mb-2">
+                  ¿Qué te interesa?
+                </label>
+                <select
+                  id="interest"
+                  name="interest"
+                  value={formData.interest}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-background border border-surface-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
+                >
+                  <option value="">Selecciona una opción</option>
+                  {contactInterestOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                  {formData.interest && !contactInterestOptions.includes(formData.interest) && (
+                    <option value={formData.interest}>{formData.interest}</option>
+                  )}
+                </select>
+              </div>
+
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-900 dark:text-[#ffffff] mb-2">
                   Cuéntanos sobre tu proyecto *

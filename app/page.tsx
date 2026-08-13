@@ -1,9 +1,12 @@
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
-import Benefits from "@/components/sections/Benefits";
-import Process from "@/components/sections/Process";
+import Products from "@/components/sections/Products";
+import CaseStudy from "@/components/sections/CaseStudy";
+import ImplementationModel from "@/components/sections/ImplementationModel";
+import Sectors from "@/components/sections/Sectors";
+import Differentiators from "@/components/sections/Differentiators";
 import Technologies from "@/components/sections/Technologies";
+import Partnership from "@/components/sections/Partnership";
 import CTA from "@/components/sections/CTA";
 import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
@@ -18,10 +21,13 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Services />
-        <Benefits />
-        <Process />
+        <Products />
+        <CaseStudy />
+        <ImplementationModel />
+        <Sectors />
+        <Differentiators />
         <Technologies />
+        <Partnership />
         <CTA />
         <FAQ />
         <Contact />

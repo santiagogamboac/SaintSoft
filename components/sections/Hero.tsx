@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue } from "fram
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -150,13 +151,13 @@ export default function Hero() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
               </span>
               <span className="text-xs font-semibold text-blue-700 dark:text-blue-300 tracking-wide uppercase">
-                Enterprise Software Solutions
+                Software + Operación + Automatización
               </span>
             </motion.div>
 
             {/* Título principal */}
             <motion.h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.75rem] xl:text-5xl font-black leading-[1.1] tracking-tight mb-5">
-              {["Transformamos", "Ideas", "en"].map((word, i) => (
+              {["Transformamos", "operaciones", "reales", "en"].map((word, i) => (
                 <motion.span
                   key={i}
                   className="inline-block mr-3 text-foreground"
@@ -173,13 +174,13 @@ export default function Hero() {
               ))}
               <br />
               <motion.span
-                className="inline-block relative"
+                className="inline-block relative mr-3"
                 initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.54, duration: 0.6 }}
+                transition={{ delay: 0.62, duration: 0.6 }}
               >
                 <span className="relative z-10 bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 dark:from-blue-400 dark:via-blue-300 dark:to-sky-400 bg-clip-text text-transparent animate-gradient-x">
-                  Software
+                  software
                 </span>
                 {/* Glow detrás de la palabra destacada */}
                 <motion.span
@@ -191,26 +192,14 @@ export default function Hero() {
                     ease: "easeInOut",
                   }}
                 />
-              </motion.span>{" "}
-              {["de", "Clase"].map((word, i) => (
-                <motion.span
-                  key={i}
-                  className="inline-block mr-3 text-foreground"
-                  initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ delay: 0.62 + i * 0.08, duration: 0.6 }}
-                >
-                  {word}
-                </motion.span>
-              ))}
-              <br className="hidden sm:block" />
+              </motion.span>
               <motion.span
-                className="inline-block mr-3 text-foreground"
+                className="inline-block text-foreground"
                 initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.78, duration: 0.6 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
               >
-                Enterprise
+                escalable
               </motion.span>
             </motion.h1>
 
@@ -221,32 +210,58 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.7 }}
             >
-              Arquitectura escalable, seguridad enterprise y acompañamiento
-              estratégico para empresas que{" "}
+              Diseñamos CRM, automatizaciones y plataformas empresariales a partir de{" "}
               <span className="font-semibold text-blue-600 dark:text-blue-400">
-                lideran su industria
+                procesos validados
               </span>
-              .
+              , con implementación estructurada y acompañamiento continuo.
             </motion.p>
 
             {/* Botones CTA */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 mb-10"
+              className="flex flex-col sm:flex-row gap-3 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1, duration: 0.7 }}
             >
               <motion.a
                 href="#contacto"
+                onClick={() => trackEvent("click_diagnostic_cta", { source: "hero" })}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                Solicitar Demo
+                Solicitar Diagnóstico
                 <ArrowRight size={18} />
               </motion.a>
+              <motion.a
+                href="#caso-tiviplay"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-semibold text-foreground bg-transparent border-2 border-surface-border hover:border-blue-400 dark:hover:border-blue-500 rounded-full transition-all duration-300"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                Ver Caso TiviPlay
+              </motion.a>
             </motion.div>
+
+            {/* Franja de confianza */}
+            <motion.a
+              href="#caso-tiviplay"
+              className="inline-flex items-center gap-2.5 mb-10 group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.25, duration: 0.7 }}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-600" />
+              </span>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                Caso real: <span className="font-semibold">JUMOCOL SAS / TiviPlay</span> — servicios recurrentes, recaudo, soporte y conciliación operacional.
+              </span>
+            </motion.a>
           </div>
 
           {/* ===== COLUMNA DERECHA: Dashboard flotante 3D ===== */}
@@ -327,7 +342,7 @@ export default function Hero() {
         transition={{ delay: 2, duration: 0.6 }}
       >
         <motion.a
-          href="#servicios"
+          href="#productos"
           className="flex flex-col items-center gap-2 group"
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
